@@ -1,0 +1,60 @@
+# Python bytecode files
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.py[cod]
+
+# Virtual environment
+venv/
+env/
+.venv/
+.env/
+
+# Django-related files
+*.log
+*.sqlite3
+db.sqlite3
+media/
+static/
+
+# Sensitive files
+*.env
+*.secret
+config/settings/*.env
+config/settings/*.local
+
+# IDE/editor folders
+.idea/
+.vscode/
+*.swp
+
+# Coverage reports
+.coverage
+coverage.xml
+*.cover
+*.py,cover
+
+# Migrations (if you want to ignore migration files, but it's generally not recommended)
+# app/migrations/*
+
+# Other Django related files
+*.pot
+*.mo
+*.po
+*.db
+
+# Docker-related files
+docker-compose.override.yml
+Dockerfile*
+.dockerignore
+
+# macOS-specific files
+.DS_Store
+
+# Windows-specific files
+Thumbs.db
+
+# Generated files
+*.pid
+*.log

@@ -1,0 +1,57 @@
+from datetime import timedelta
+from rest_framework_simplejwt.tokens import AccessToken
+from django.http import JsonResponse
+
+from .middleware import authenticated
+from .serializers import UserSerializer
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+from django.contrib.auth import authenticate
+from rest_framework_simplejwt.tokens import RefreshToken
+
+@api_view(['POST'])
+def register_controller(request):
+    serializer = UserSerializer(data=request.data)
+    if serializer.is_valid():
+        user = serializer.save()
+        refresh = RefreshToken.for_user(user)
+        response = JsonResponse({
+            "user": serializer.data,
+        })
+        response.set_cookie(
+            'access-token', str(refresh.access_token),
+            httponly=True,
+            max_age=timedelta(days=7),
+            samesite='Strict'
+        )
+        return response
+    return Response(serializer.errors, status=400)
+
+@api_view(['POST'])
+def login_controller(request):
+    username = request.data.get('username')
+    password = request.data.get('password')
+    if not username or not password:
+        return Response({"error": "username and password are required"}, status=400)
+    user = authenticate(username=username, password=password)
+    if user is not None:
+        refresh = RefreshToken.for_user(user)
+        response = JsonResponse({
+            "message": "Login successful",
+            "user": UserSerializer(user).data,
+        })
+        response.set_cookie(
+            'access-token', str(refresh.access_token),
+            httponly=True,
+            max_age=timedelta(days=7),
+            samesite='Strict'
+        )
+        return response
+    return Response({"error": "Invalid credentials"}, status=401)
+
+
+@api_view(['GET'])
+@authenticated
+def status_controller(request):
+    serialized_user = UserSerializer(request.user)
+    return Response({"message": "authentificated", "user": serialized_user.data})
