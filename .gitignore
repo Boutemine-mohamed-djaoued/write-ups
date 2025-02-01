@@ -17,7 +17,7 @@ env/
 db.sqlite3
 media/
 static/
-
+app/settings.py
 # Sensitive files
 *.env
 *.secret

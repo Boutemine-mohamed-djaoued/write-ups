@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Blog
+from .models import Blog, Categories
 
 class BlogSerializer(serializers.ModelSerializer):
     class Meta:
@@ -9,3 +9,12 @@ class BlogSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         blog = Blog.objects.create(**validated_data)
         return blog
+    
+class CategoriesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Categories
+        fields = ['id', 'name']
+
+    def create(self, validated_data):
+        category = Categories.objects.create(**validated_data)
+        return category
