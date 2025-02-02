@@ -4,7 +4,7 @@ from .models import Blog, Categories
 class BlogSerializer(serializers.ModelSerializer):
     class Meta:
         model = Blog
-        fields = ['id', 'title', 'content', 'user']
+        fields = ['id', 'title', 'description', 'user']
 
     def create(self, validated_data):
         blog = Blog.objects.create(**validated_data)

@@ -7,7 +7,7 @@ class Blog(models.Model):
     description = models.TextField(blank=True, null=True)
     content = models.JSONField()
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='blogs')
-
+ 
     def __str__(self):
         return self.title
     
