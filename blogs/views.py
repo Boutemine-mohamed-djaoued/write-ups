@@ -12,10 +12,18 @@ from django.shortcuts import get_object_or_404
 # @authenticated
 def blog_controller(request):
     if (request.method == 'GET'):
+        blog_id = request.GET.get('id')
+        print("i am here in GET", blog_id)
+        if blog_id:
+            print("i am here by ID")
+            blog = get_object_or_404(Blog,id=blog_id)
+            if blog:
+                serializer = BlogSerializer(blog,context={'request': request})
+                return Response(serializer.data, status=200)
         blogs = Blog.objects.all()
         paginator = PageNumberPagination() #add ?page=i to the url to get the i*th page
         result_page = paginator.paginate_queryset(blogs,request)
-        serializer = BlogSerializer(result_page, many=True)
+        serializer = BlogSerializer(result_page, many=True, context={'request': request})
         return Response(serializer.data, status=200)
     if (request.method == 'POST'):
         data = request.data.copy()
