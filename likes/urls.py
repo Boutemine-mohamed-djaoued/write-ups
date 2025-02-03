@@ -5,5 +5,5 @@ from . import views
 router = DefaultRouter()
 
 urlpatterns = [
- path('like/<int:id>/',views.like_unlike_blog,name="like")
+  path('like/<int:id>/',views.like_unlike_blog,name="like")
 ]
