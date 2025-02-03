@@ -30,9 +30,6 @@ def get_likes(request):
 @api_view(['GET'])
 @authenticated
 def get_likes_by_user(request,id):
-    """
-    gets the likes done by a given user
-    """
     likes=Like.objects.filter(user=id)
     if not likes:
         return Response({"error":"the user doesn't exist or has never liked a blog"})
@@ -42,9 +39,6 @@ def get_likes_by_user(request,id):
 @api_view(['GET'])
 @authenticated
 def get_likes_by_blog(request,id):
-    """
-    gets the likes on a given blog
-    """
     likes=Like.objects.filter(blog=id)
     if not likes:
         return Response({"error":"the blog doesn't exist or has no likes"})

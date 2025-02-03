@@ -1,19 +1,20 @@
 from datetime import timedelta
 from rest_framework_simplejwt.tokens import AccessToken
 from django.http import JsonResponse
-
 from .serializers import UserSerializer
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
 from .middleware import authenticated
+from .docs import register_docs, login_docs, logout_docs
 
 
 # i created a user in the data base as a start point
 # then each user aka admin can create a another one
+@register_docs
 @api_view(['POST'])
-#@authenticated
+# @authenticated
 def register_controller(request):
     serializer = UserSerializer(data=request.data)
     if serializer.is_valid():
@@ -31,6 +32,7 @@ def register_controller(request):
         return response
     return Response(serializer.errors, status=400)
 
+@login_docs
 @api_view(['POST'])
 def login_controller(request):
     username = request.data.get('username')
@@ -53,7 +55,8 @@ def login_controller(request):
         return response
     return Response({"error": "Invalid credentials"}, status=401)
 
-
+@logout_docs
+@authenticated
 @api_view(['POST'])
 def logout_controller(request):
     response = JsonResponse({"message": "Logout successful"})
