@@ -13,7 +13,7 @@ from .middleware import authenticated
 # i created a user in the data base as a start point
 # then each user aka admin can create a another one
 @api_view(['POST'])
-@authenticated
+#@authenticated
 def register_controller(request):
     serializer = UserSerializer(data=request.data)
     if serializer.is_valid():
