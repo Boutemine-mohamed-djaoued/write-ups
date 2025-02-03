@@ -1,7 +1,6 @@
 from .models import User
 from functools import wraps
 from rest_framework_simplejwt.tokens import AccessToken
-from rest_framework.response import Response
 from django.http import JsonResponse
 
 def authenticated(view_func):

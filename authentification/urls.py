@@ -1,11 +1,11 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import register_controller,status_controller,login_controller
+from .views import register_controller,login_controller,logout_controller
 
 router = DefaultRouter()
 
 urlpatterns = [
-    path('register/', register_controller , name='register_controller'),
-    path('login/', login_controller , name='login_controller'),
-    path('status/', status_controller , name='status-controller'),
+    path('register/', register_controller , name='regester'),
+    path('login/', login_controller , name='login'),
+    path('logout/',logout_controller, name="logout")
 ]
