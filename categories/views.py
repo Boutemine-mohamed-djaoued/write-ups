@@ -1,18 +1,23 @@
 
+from django.http import JsonResponse
 from categories.models import Categories
 from .serializers import CategoriesSerializer
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from authentification.middleware import authenticated
+from authentification.middleware import authenticated, authenticate_request
 from django.shortcuts import get_object_or_404
 
 @api_view(['GET','POST'])
-@authenticated
 def categories_controller(request):
     if request.method == 'GET':
         categories = Categories.objects.all()
         serializer = CategoriesSerializer(categories, many=True)
         return Response(serializer.data, status=200)
+    user_or_error = authenticate_request(request)
+    if isinstance(user_or_error, JsonResponse):
+        return user_or_error
+    if (user_or_error.role != 'admin'):
+        return Response({"error": "You are not authorized to create a category"}, status=403)
     if request.method == 'POST':
         serializer = CategoriesSerializer(data=request.data)
         if serializer.is_valid():
@@ -22,6 +27,7 @@ def categories_controller(request):
 
 
 @api_view(['DELETE'])
+@authenticated(role='admin')
 def delete_category_controller(request,id):
     print(request.data)
     category = get_object_or_404(Categories,id=id)

@@ -10,12 +10,10 @@ from .middleware import authenticated
 from .docs import register_docs, login_docs, logout_docs
 
 
-# i created a user in the data base as a start point
-# then each user aka admin can create a another one
 @register_docs
 @api_view(['POST'])
-# @authenticated
 def register_controller(request):
+    request.data['role'] = 'user'
     serializer = UserSerializer(data=request.data)
     if serializer.is_valid():
         user = serializer.save()
@@ -56,7 +54,7 @@ def login_controller(request):
     return Response({"error": "Invalid credentials"}, status=401)
 
 @logout_docs
-@authenticated
+@authenticated()
 @api_view(['POST'])
 def logout_controller(request):
     response = JsonResponse({"message": "Logout successful"})

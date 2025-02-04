@@ -7,7 +7,7 @@ from .serializers import LikeSerializer
 
 
 @api_view(['POST'])
-@authenticated
+@authenticated()
 def like_unlike_blog(request, id):
     user = request.user
     try:
@@ -21,14 +21,14 @@ def like_unlike_blog(request, id):
     return Response({"response": "Liked the blog"}, status=201)
 
 @api_view(['GET'])
-@authenticated
+@authenticated()
 def get_likes(request):
     likes=Like.objects.all()
     serializer=LikeSerializer(likes,many=True)
     return Response(serializer.data,status=200)
 
 @api_view(['GET'])
-@authenticated
+@authenticated()
 def get_likes_by_user(request,id):
     likes=Like.objects.filter(user=id)
     if not likes:
@@ -37,7 +37,7 @@ def get_likes_by_user(request,id):
     return Response(serializer.data,status=200)
 
 @api_view(['GET'])
-@authenticated
+@authenticated()
 def get_likes_by_blog(request,id):
     likes=Like.objects.filter(blog=id)
     if not likes:

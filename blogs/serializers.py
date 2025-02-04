@@ -11,9 +11,6 @@ class BlogSerializer(serializers.ModelSerializer):
         fields = ['id', 'title', 'description', 'content', 'user', 'categories' , 'likes_count']
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        request = self.context.get('request')
-        if request and request.GET.get('id') is None:
-            data.pop('content', None)
         return data
     def get_categories(self, obj):
         blog_categories = Blogs_Categories.objects.filter(blog_id=obj).select_related('category_id')

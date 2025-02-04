@@ -5,21 +5,24 @@ from django.http import JsonResponse
 
 
 
-def authenticated(view_func):
-    @wraps(view_func)
-    def _wrapped_view(request, *args, **kwargs):
-        access_token = request.COOKIES.get('access-token')
-        if not access_token:
-            return JsonResponse({"error": "No access token provided"}, status=401)
-        try:
-            access_token_obj = AccessToken(access_token)
-            user_id = access_token_obj['user_id']
-            request.user = User.objects.get(id=user_id)
-        except Exception as e:
-            return JsonResponse({"error": "Invalid or expired access token"}, status=401)
-
-        return view_func(request, *args, **kwargs)
-    return _wrapped_view
+def authenticated(role=None):
+    def decorator(view_func):
+        @wraps(view_func)
+        def _wrapped_view(request, *args, **kwargs):
+            access_token = request.COOKIES.get('access-token')
+            if not access_token:
+                return JsonResponse({"error": "No access token provided"}, status=401)
+            try:
+                access_token_obj = AccessToken(access_token)
+                user_id = access_token_obj['user_id']
+                request.user = User.objects.get(id=user_id)
+                if role and getattr(request.user, 'role', None) != role:
+                    return JsonResponse({"error": "Unauthorized access"}, status=403)
+            except Exception:
+                return JsonResponse({"error": "Invalid or expired access token"}, status=401)
+            return view_func(request, *args, **kwargs)
+        return _wrapped_view
+    return decorator
 
 def authenticate_request(request):
     access_token = request.COOKIES.get('access-token')

@@ -27,6 +27,8 @@ def blog_controller(request):
         user_or_error = authenticate_request(request)
         if isinstance(user_or_error, JsonResponse):
             return user_or_error
+        if (user_or_error.role != 'admin'):
+            return Response({"error": "You are not authorized to create a blog"}, status=403)
         data = request.data.copy()
         data['user'] = user_or_error.id
         categories = data.pop('categories', [])
@@ -52,6 +54,8 @@ def one_blog_controller(request,id):
     user_or_error = authenticate_request(request)
     if isinstance(user_or_error, JsonResponse):
         return user_or_error
+    if (user_or_error.role != 'admin'):
+        return Response({"error": "You are not authorized to update or delete a blog"}, status=403)
     if request.method == 'PUT':
         blog = get_object_or_404(Blog, id=id)
         if blog:
