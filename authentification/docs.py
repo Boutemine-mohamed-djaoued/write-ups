@@ -3,7 +3,7 @@ from drf_yasg.utils import swagger_auto_schema
 
 register_docs = swagger_auto_schema(
     method='post',
-    operation_description="Register a new user. Each user (admin) can create another user.",
+    operation_description="Register a new user.",
     request_body=openapi.Schema(
         type=openapi.TYPE_OBJECT,
         properties={

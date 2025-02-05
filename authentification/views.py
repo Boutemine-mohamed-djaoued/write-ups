@@ -10,6 +10,7 @@ from .middleware import authenticated
 from .docs import register_docs, login_docs, logout_docs
 
 
+# intialy all users does have role='user' and only the one that have access to the db can change the role to 'admin'
 @register_docs
 @api_view(['POST'])
 def register_controller(request):
