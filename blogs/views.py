@@ -8,7 +8,10 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.pagination import PageNumberPagination
 from django.shortcuts import get_object_or_404
 from authentification.middleware import authenticate_request
+from .docs import blog_create_docs, blog_list_docs, blog_detail_docs, blog_update_docs, blog_delete_docs
 
+@blog_create_docs
+@blog_list_docs
 @api_view(['GET','POST'])
 def blog_controller(request):
     if request.method == 'GET':
@@ -44,6 +47,11 @@ def blog_controller(request):
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
 
+
+
+@blog_detail_docs
+@blog_update_docs
+@blog_delete_docs
 @api_view(['GET','DELETE','PUT'])
 def one_blog_controller(request,id):
     if (request.method == 'GET'):

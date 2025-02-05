@@ -6,7 +6,10 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from authentification.middleware import authenticated, authenticate_request
 from django.shortcuts import get_object_or_404
+from .docs import category_list_docs, category_create_docs, category_delete_docs
 
+@category_list_docs
+@category_create_docs
 @api_view(['GET','POST'])
 def categories_controller(request):
     if request.method == 'GET':
@@ -25,7 +28,7 @@ def categories_controller(request):
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
 
-
+@category_delete_docs
 @api_view(['DELETE'])
 @authenticated(role='admin')
 def delete_category_controller(request,id):
